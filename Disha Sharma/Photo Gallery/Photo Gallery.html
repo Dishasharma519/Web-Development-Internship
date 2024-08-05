@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            background: url('https://pub-static.fotor.com/assets/bg/166f87f6-1958-41be-a6c5-8a64bfbee677.jpg') no-repeat center center fixed;
+            background-size: cover;
+            transition: background 0.5s ease-in-out;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        header nav {
+            margin-top: 10px;
+        }
+
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #fda085;
+        }
+
+        /* Profile Section in Header */
+        .header-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        .header-profile img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .header-profile p {
+            margin: 5px 0 0 0;
+            font-size: 1em;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+
+        footer a {
+            color: #fda085;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Gallery Container */
+        .gallery-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+
+        /* Gallery Styles */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+            width: calc(25% - 20px);
+            background-color: #fff;
+            border: 2px solid #ddd;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+            filter: brightness(1.1);
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 15px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .caption {
+            opacity: 1;
+        }
+
+        /* Lightbox Styles */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .lightbox.fade-in {
+            opacity: 1;
+        }
+
+        .lightbox.fade-out {
+            opacity: 0;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 15px;
+            object-fit: contain;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease;
+        }
+
+        .lightbox-content.zoom-in {
+            transform: scale(1.05);
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .close:hover {
+            color: #ff6666;
+            transform: rotate(90deg);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .gallery-item {
+                width: calc(33.333% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .gallery-item {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-item {
+                width: calc(100% - 20px);
+            }
+
+            .close {
+                font-size: 40px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .lightbox-content {
+                max-width: 100%;
+                max-height: 90%;
+            }
+
+            .caption {
+                font-size: 14px;
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div>
+            <h1>Disha Sharma's Photo Gallery..(@^=^@)</h1>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Gallery</a>
+                <a href="#">Contact</a>
+            </nav>
+        </div>
+        <div class="header-profile">
+            <img src="C:\Users\Pc\OneDrive\Desktop\Photo Gallery\meh.jpeg" alt="Your Photo">
+            <p>dishasharmajimsvk@gmail.com</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="gallery-container">
+        <div class="gallery">
+            <!-- Thumbnail previews with captions -->
+            <div class="gallery-item">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/036/135/738/small_2x/ai-generated-colored-water-drops-on-abstract-background-water-drops-on-colorful-background-colored-wallpaper-ultra-hd-colorful-wallpaper-background-with-colored-bubbles-photo.jpg" alt="Photo 1" class="thumbnail" data-full="https://static.vecteezy.com/system/resources/thumbnails/036/135/738/small_2x/ai-generated-colored-water-drops-on-abstract-background-water-drops-on-colorful-background-colored-wallpaper-ultra-hd-colorful-wallpaper-background-with-colored-bubbles-photo.jpg">
+                <div class="caption">AI Generated Colored Water Drops</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700245168.jpg" alt="Photo 2" class="thumbnail" data-full="https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77700245168.jpg">
+                <div class="caption">High Resolution Wallpaper</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://png.pngtree.com/thumb_back/fh260/background/20230516/pngtree-wolfs-full-hd-wallpaper-art-wallpaper-1920x1080-1080p-image_2571308.jpg" alt="Photo 3" class="thumbnail" data-full="https://png.pngtree.com/thumb_back/fh260/background/20230516/pngtree-wolfs-full-hd-wallpaper-art-wallpaper-1920x1080-1080p-image_2571308.jpg">
+                <div class="caption">Wolfs HD Wallpaper</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.pexels.com/photos/444704/pexels-photo-444704.jpeg?cs=srgb&dl=pexels-magda-ehlers-pexels-444704.jpg&fm=jpg" alt="Photo 4" class="thumbnail" data-full="https://images.pexels.com/photos/444704/pexels-photo-444704.jpeg?cs=srgb&dl=pexels-magda-ehlers-pexels-444704.jpg&fm=jpg">
+                <div class="caption">Beautiful Nature Scene</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://p4.wallpaperbetter.com/wallpaper/27/502/372/mind-teaser-wallpaper-preview.jpg" alt="Photo 5" class="thumbnail" data-full="https://p4.wallpaperbetter.com/wallpaper/27/502/372/mind-teaser-wallpaper-preview.jpg">
+                <div class="caption">Mind Teaser Wallpaper</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.pixabay.com/photo/2023/11/09/19/36/zoo-8378189_640.jpg" alt="Photo 6" class="thumbnail" data-full="https://cdn.pixabay.com/photo/2023/11/09/19/36/zoo-8378189_640.jpg">
+                <div class="caption">Zoo Animal</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://m.media-amazon.com/images/I/91GXbWO4sTL._AC_UF1000,1000_QL80_.jpg" alt="Photo 7" class="thumbnail" data-full="https://m.media-amazon.com/images/I/91GXbWO4sTL._AC_UF1000,1000_QL80_.jpg">
+                <div class="caption">Artistic Portrait</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://www.mapsofindia.com/world-map/india/india-states-and-capital-map.jpg" alt="Photo 8" class="thumbnail" data-full="https://www.mapsofindia.com/world-map/india/india-states-and-capital-map.jpg">
+                <div class="caption">India Map</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://w0.peakpx.com/wallpaper/852/116/HD-wallpaper-mahadev-lord-shiva-shiva-hindu-bhakti-devotional-god-thumbnail.jpg" alt="Photo 9" class="thumbnail" data-full="https://w0.peakpx.com/wallpaper/852/116/HD-wallpaper-mahadev-lord-shiva-shiva-hindu-bhakti-devotional-god-thumbnail.jpg">
+                <div class="caption">Lord Shiva</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1610085927744-7217728267a6?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Photo 10" class="thumbnail" data-full="https://images.unsplash.com/photo-1610085927744-7217728267a6?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+                <div class="caption">Scenic Landscape</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://img.freepik.com/premium-photo/colorful-floral-pattern-with-flowers-dark-background_839172-67.jpg" alt="Photo 11" class="thumbnail" data-full="https://img.freepik.com/premium-photo/colorful-floral-pattern-with-flowers-dark-background_839172-67.jpg">
+                <div class="caption">Colorful Floral Pattern</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://c4.wallpaperflare.com/wallpaper/45/360/53/lord-shiva-hindu-gods-hinduism-india-hd-wallpaper-preview.jpg" alt="Photo 12" class="thumbnail" data-full="https://c4.wallpaperflare.com/wallpaper/45/360/53/lord-shiva-hindu-gods-hinduism-india-hd-wallpaper-preview.jpg">
+                <div class="caption">Lord Shiva HD Wallpaper</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.lazyshop.com/files/273d4985-ae97-40da-84b1-98340e6f292c/product/1ada3b334e0382912180e2d5b76b7066.jpeg?x-oss-process=style%2Fthumb" alt="Photo 13" class="thumbnail" data-full="https://cdn.lazyshop.com/files/273d4985-ae97-40da-84b1-98340e6f292c/product/1ada3b334e0382912180e2d5b76b7066.jpeg?x-oss-process=style%2Fthumb">
+                <div class="caption">Product Showcase</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://sciencenotes.org/wp-content/uploads/2017/05/PeriodicTableWallpaper2017BBG.png" alt="Photo 14" class="thumbnail" data-full="https://sciencenotes.org/wp-content/uploads/2017/05/PeriodicTableWallpaper2017BBG.png">
+                <div class="caption">Periodic Table Wallpaper</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdn.pixabay.com/photo/2013/09/25/17/16/peacock-feather-186339_1280.jpg" alt="Photo 15" class="thumbnail" data-full="https://cdn.pixabay.com/photo/2013/09/25/17/16/peacock-feather-186339_1280.jpg">
+                <div class="caption">Peacock Feather</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://e1.pxfuel.com/desktop-wallpaper/991/333/desktop-wallpaper-black-lion-backgrounds-hupages-iphone-skin-of-animals.jpg" alt="Photo 16" class="thumbnail" data-full="https://e1.pxfuel.com/desktop-wallpaper/991/333/desktop-wallpaper-black-lion-backgrounds-hupages-iphone-skin-of-animals.jpg">
+                <div class="caption">Black Lion</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://w0.peakpx.com/wallpaper/396/48/HD-wallpaper-baba-bholenath-with-cow-baba-bholenath-bhakti-thumbnail.jpg" alt="Photo 17" class="thumbnail" data-full="https://w0.peakpx.com/wallpaper/396/48/HD-wallpaper-baba-bholenath-with-cow-baba-bholenath-bhakti-thumbnail.jpg">
+                <div class="caption">Baba Bholenath</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://w0.peakpx.com/wallpaper/541/346/HD-wallpaper-shinchan-cartoon-naughty.jpg" alt="Photo 18" class="thumbnail" data-full="https://w0.peakpx.com/wallpaper/541/346/HD-wallpaper-shinchan-cartoon-naughty.jpg">
+                <div class="caption">Shinchan Cartoon</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.pexels.com/photos/85773/pexels-photo-85773.jpeg?cs=srgb&dl=pexels-unchalee-srirugsar-14114-85773.jpg&fm=jpg" alt="Photo 19" class="thumbnail" data-full="https://images.pexels.com/photos/85773/pexels-photo-85773.jpeg?cs=srgb&dl=pexels-unchalee-srirugsar-14114-85773.jpg&fm=jpg">
+                <div class="caption">Beautiful Scenery</div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://e0.pxfuel.com/wallpapers/195/821/desktop-wallpaper-astronaut-space-aesthetic-outer-space-aesthetic-thumbnail.jpg" alt="Photo 20" class="thumbnail" data-full="https://e0.pxfuel.com/wallpapers/195/821/desktop-wallpaper-astronaut-space-aesthetic-outer-space-aesthetic-thumbnail.jpg">
+                <div class="caption">Astronaut in Space</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <img id="lightbox-img" class="lightbox-content" src="" alt="Lightbox Image">
+        <span class="close">&times;</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Photo Gallery. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const closeBtn = document.querySelector('.close');
+
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const imgSrc = item.querySelector('.thumbnail').getAttribute('data-full');
+                    lightboxImg.src = imgSrc;
+                    lightbox.classList.add('fade-in');
+                    lightbox.style.display = 'flex';
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                lightbox.classList.remove('fade-in');
+                lightbox.classList.add('fade-out');
+                setTimeout(() => {
+                    lightbox.style.display = 'none';
+                    lightbox.classList.remove('fade-out');
+                }, 500);
+            });
+
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) {
+                    closeBtn.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

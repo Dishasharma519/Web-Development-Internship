@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disha Sharma Portfolio</title>
+    <style>
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8) ;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        #loading-screen img {
+            animation: expand 5s ease-in-out forwards;
+        }
+
+        @keyframes expand {
+            0% {
+                width: 50px;
+                height: 50px;
+            }
+            100% {
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+        /* General reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Vrinda', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+            color: #333;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .logo img {
+            width: 260px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Arial', sans-serif;
+        }
+
+        nav ul li a:hover {
+            color: #f44336;
+        }
+
+        section {
+            margin: 100px 0 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-family: 'Helvetica', sans-serif;
+            position: relative;
+            display: inline-block;
+            color: #333;
+            background: -webkit-linear-gradient(45deg, #f44336, #2196f3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: #333;
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            animation: underline 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes underline {
+            0% {
+                width: 0;
+            }
+
+            100% {
+                width: 50px;
+            }
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .about-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-right: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .about-img:hover {
+            transform: rotate(360deg);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-family: 'Georgia', serif;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .skills-list li {
+            background-color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: 'Arial', sans-serif;
+            cursor: pointer;
+        }
+
+        .skills-list li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .project {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .project:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .project img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .project-description {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project:hover .project-description {
+            display: flex;
+            opacity: 1;
+        }
+
+        .project h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-family: 'Verdana', sans-serif;
+            color: #333;
+            background: -webkit-linear-gradient(45deg, #ff5722, #009688);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInLeft 1s forwards;
+        }
+
+        .project p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-form label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+        }
+
+        .contact-form button {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .contact-form button:hover {
+            background-color: #f44336;
+        }
+
+        .social-media {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-media a {
+            display: inline-block;
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-media a:hover {
+            color: #f44336;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            position: relative;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+            font-family: 'Arial', sans-serif;
+            animation: colorChange 5s infinite;
+        }
+
+        @keyframes colorChange {
+            0% {
+                color: #f44336;
+            }
+
+            25% {
+                color: #2196f3;
+            }
+
+            50% {
+                color: #ffeb3b;
+            }
+
+            75% {
+                color: #4caf50;
+            }
+
+            100% {
+                color: #f44336;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Media queries */
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .about-img {
+                margin-bottom: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin-bottom: 10px;
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        /* Offset for header navigation */
+        section[id] {
+            scroll-margin-top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loading-screen">
+        <img src="C:\Users\Pc\OneDrive\Desktop\logo.jpg" alt="Logo">
+    </div>
+    <header>
+        <a href="#" class="logo">
+            <img src="C:\Users\Pc\OneDrive\Desktop\logo.jpg" alt="Disha Sharma">
+            
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#resume">Resume</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#youtube">YouTube</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <img src="C:\Users\Pc\OneDrive\Desktop\me.jpeg" alt="Disha Sharma" class="about-img">
+                <p>
+                    Hello! I’m Disha Sharma, a web developer who sees every line of code as a brushstroke on the canvas of the digital world. My journey began with a fascination for how things work behind the scenes, and it has blossomed into a passionate pursuit of creating seamless, engaging web experiences.<br>
+                    My commitment to coding goes beyond just writing code; it’s about crafting digital experiences that inspire and captivate. I’m driven by a relentless curiosity and an unwavering dedication to solving complex problems with elegant solutions.
+                </p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Skills</h2>
+            <b><center>"Crafting Digital Dreams with Precision!"</center></b>
+            <ul align="center" class="skills-list">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>WordPress</li>
+                <li>PHP</li>
+                <li>DBMS</li>
+                <li>C</li>
+            </ul>
+        </section>
+
+        <section id="education">
+            <h2>Education</h2>
+            <div>
+                <div class="education-item">
+                    <img src="C:\Users\Pc\OneDrive\Desktop\jimslogo.png" alt="Education Image" style="width: 55px; float: left; margin-left: 15px;">
+                    <p>Pursuing Bachelor of Computer Applications, Jagannath International Management School, Vasant Kunj, New Delhi, 2023-2026</p> <br>
+                </div>
+                <div class="education-item">
+                    <img src="C:\Users\Pc\OneDrive\Desktop\vtilogo.jpg" alt="Education Image" style="width: 55px; float: left; margin-left: 15px;">
+                    <p>Diploma in Elementary Education, Vidya Training Institute, 2021-2023</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="resume">
+            <h2>Resume</h2>
+            <a href="file:///C:/Users/Pc/OneDrive/Desktop/Resume.pdf" download><br>
+               <center> <button>Download Resume</button></center>
+            </a>
+        </section>
+
+        <section id="projects">
+            <h2>Projects</h2>
+            <center><b>Turning ideas into interactive realities, one pixel at a time! </b><br><br> </center>
+            <div class="projects-grid">
+                <!-- Project 1 to 15 -->
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\portfolio.png" alt="Project 1">
+                        <h3>Project 1</h3>
+                        <p>Portfolio</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Creative Visionary Showcase</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\Landing Page.png" alt="Project 2">
+                        <h3>Project 2</h3>
+                        <p>Landing Page</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Innovative Digital Craft</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\photo gallery.png" alt="Project 3">
+                        <h3>Project 3</h3>
+                        <p>Photo Gallery</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Dynamic Web Brilliance</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\student enrollment form.png" alt="Project 4">
+                        <h3>Project 4</h3>
+                        <p>Student Enrollement Form</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Cutting-Edge Code Canvas</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\Interactive quiz game.png" alt="Project 5">
+                        <h3>Project 5</h3>
+                        <p>Interactive Quiz Game</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Interactive Web Artistry</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\e commerce product page.png" alt="Project 6">
+                        <h3>Project 6</h3>
+                        <p>E-Commerce Product Page</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Versatile Tech Mastery</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\weather forecast app.png" alt="Project 7">
+                        <h3>Project 7</h3>
+                        <p>Weather Forecast App</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Elegant Code Expressions</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\to do list.png" alt="Project 8">
+                        <h3>Project 8</h3>
+                        <p>To-Do List Web Application</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Immersive Web Experiences</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\blogging.png" alt="Project 9">
+                        <h3>Project 9</h3>
+                        <p>Blogging Platform</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Future-Driven Webcraft</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\social media.png" alt="Project 10">
+                        <h3>Project 10</h3>
+                        <p>Social Media Platform</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Exquisite Digital Journeys</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\online.png" alt="Project 11">
+                        <h3>Project 11</h3>
+                        <p>Online Marketplace</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Ingenious Web Marvels</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\E-commerce.png" alt="Project 12">
+                        <h3>Project 12</h3>
+                        <p>E-Commerce Website</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Exceptional Digital Flair</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\user authentication.jpg" alt="Project 13">
+                        <h3>Project 13</h3>
+                        <p>User Authentication System</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Sleek Online Creations</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\Booking.png" alt="Project 14">
+                        <h3>Project 14</h3>
+                        <p>Booking Website</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Refined Web Excellence</p>
+                    </div>
+                </div>
+                <div class="project">
+                    <div class="project-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\Coming Soon.png" alt="Project 15">
+                        <h3>Project 15</h3>
+                        <p>"Working..(^=^)"</p>
+                    </div>
+                    <div class="project-description">
+                        <p>Pioneering Web Design</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="youtube">
+            <h2>YouTube Video</h2>
+            <div class="youtube-grid">
+                <div class="youtube-video">
+                    <div class="youtube-content">
+                        <img src="C:\Users\Pc\OneDrive\Desktop\youtube.jpeg" alt="Video 1" width="150px" height="100px">
+                        <h3>UNIT- 1 Health Education D.El.Ed. II Year</h3>
+                        <p>Health and Physical Education</p>
+                    </div>
+                    <div class="youtube-description">
+                        <p></p>
+                    </div>
+                </div>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <form class="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+            <div class="social-media">
+                <a href="https://en.wikipedia.org/wiki/Instagram" target="">Instagram</a>
+                <a href="www.youtube.com/@SmartClasses519" target="">YouTube</a>
+                <a href="www.linkedin.com/in/disha-sharma-68993b312" target="">LinkedIn</a> 
+                <a href="https://en.wikipedia.org/wiki/GitHub" target="">GitHub</a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Disha Sharma. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                document.getElementById("loading-screen").style.display = "none";
+                document.body.style.overflow = "auto"; // Allow scrolling after loading screen disappears
+            }, 3200);
+        });
+    </script>
+</body>
+</html>
